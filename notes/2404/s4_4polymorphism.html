@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>S4.4 Polymorphism.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+	font-size: 14px;
+	padding: 0 12px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family:  "Meiryo", "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+</head>
+<body>
+<h1 id="s44-polymorphism">S4.4 Polymorphism</h1>
+<ul>
+<li><a href="#s44-polymorphism">S4.4 Polymorphism</a>
+<ul>
+<li><a href="#s441-overview">S4.4.1 Overview</a>
+<ul>
+<li><a href="#definition">Definition</a></li>
+<li><a href="#how-does-it-work">How does it work</a></li>
+<li><a href="#unbreakable-rules-of-polymorphism">Unbreakable rules of Polymorphism</a></li>
+<li><a href="#underlying-idea">Underlying idea</a>
+<ul>
+<li><a href="#example-pointers-to-objects"><em>Example (pointers to objects)</em></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#s442-pointers-and-class-hierarchy">S4.4.2 Pointers and Class Hierarchy</a></li>
+<li><a href="#s443-dynamic-binding">S4.4.3 Dynamic Binding</a>
+<ul>
+<li><a href="#terminology">Terminology</a>
+<ul>
+<li><a href="#example-dynamic-binding-why-it-breaks"><em>Example Dynamic Binding (why it breaks)</em></a></li>
+</ul>
+</li>
+<li><a href="#function-binding">Function Binding</a>
+<ul>
+<li><a href="#static-binding">Static Binding</a></li>
+<li><a href="#dynamic-binding">Dynamic Binding</a></li>
+</ul>
+</li>
+<li><a href="#virtual-functions">Virtual Functions</a>
+<ul>
+<li><a href="#example-virtual-functions"><em>Example (Virtual Functions)</em></a></li>
+<li><a href="#example-bindings"><em>Example (Bindings)</em></a></li>
+</ul>
+</li>
+<li><a href="#virtual-destructors">Virtual Destructors</a>
+<ul>
+<li><a href="#example-non-virtual-destructors"><em>Example Non-Virtual Destructors</em></a></li>
+<li><a href="#example-virtual-destructors"><em>Example Virtual Destructors</em></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#s444-abstract-classes">S4.4.4 Abstract Classes</a>
+<ul>
+<li><a href="#definition-1">Definition</a>
+<ul>
+<li><a href="#pure-virtual-function">Pure Virtual Function</a>
+<ul>
+<li><a href="#example"><em>Example</em></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#s445-dynamic-casting">S4.4.5 Dynamic Casting</a>
+<ul>
+<li><a href="#incomplete-example-dynamic-casting"><em>INCOMPLETE Example Dynamic Casting</em></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="s441-overview">S4.4.1 Overview</h2>
+<h3 id="definition">Definition</h3>
+<ul>
+<li>Used to isolate <code>client classes</code> from derived classes</li>
+</ul>
+<h3 id="how-does-it-work">How does it work</h3>
+<ul>
+<li><strong>Dynamic Binding</strong> we bind the f(x) to the appropriate f(x) during <em>runtime</em>0</li>
+</ul>
+<h3 id="unbreakable-rules-of-polymorphism">Unbreakable rules of Polymorphism</h3>
+<ul>
+<li>only works on objects that are related to each other through <em>inheritance</em></li>
+<li>only works using <em>pointers</em></li>
+</ul>
+<h3 id="underlying-idea">Underlying idea</h3>
+<h4 id="example-pointers-to-objects"><em>Example (pointers to objects)</em></h4>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Animal</span> {</span>
+    <span class="hljs-keyword">public</span>:
+        Animal(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : name(n) {}
+        <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">()</span> </span>{ ... }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Bird</span> :</span> <span class="hljs-keyword">public</span> Animal {
+    <span class="hljs-keyword">public</span>:
+        Bird(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : Animal(n) {}
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Chicken</span> :</span> <span class="hljs-keyword">public</span> Bird {
+    <span class="hljs-keyword">public</span>:
+        Chicken(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : Bird(n) {}
+}
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-function">Animal  <span class="hljs-title">gertrude</span><span class="hljs-params">(<span class="hljs-string">"Gertrude"</span>)</span></span>;
+    <span class="hljs-function">Bird    <span class="hljs-title">birtrude</span><span class="hljs-params">(<span class="hljs-string">"Birtrude"</span>)</span></span>;
+    <span class="hljs-function">Chicken <span class="hljs-title">redHen</span><span class="hljs-params">(<span class="hljs-string">"LittleRedHen"</span>)</span></span>;
+
+    Animal*     ap;
+    Bird*       bp;
+    Chicken*    cp;
+
+    <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-built_in">endl</span> &lt;&lt; <span class="hljs-string">"base ptr points to base object"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
+    <span class="hljs-comment">// Base ptr points to base object</span>
+    <span class="hljs-comment">// Derived ptr points to derived object (Bird, Chicken)</span>
+    ap = &amp;gertrude; <span class="hljs-comment">// Put animal pointer set to animal</span>
+    bp = &amp;birtrude;
+    cp = &amp;redHen;
+
+    ap -&gt; sing();
+    bp -&gt; sing();
+    cp -&gt; sing();
+
+    <span class="hljs-comment">// Base ptr points to derived object</span>
+    <span class="hljs-comment">// The hen is a type of bird so we can access the bird parts of the hen</span>
+    bp = &amp;redHen;
+
+    <span class="hljs-comment">// Derived class ptr pointing to a derived object</span>
+    <span class="hljs-comment">// Not allowed because it tries to do a conversion (down-cast) which is illegal</span>
+    <span class="hljs-comment">// An animal is not a type of chicken</span>
+    cp = &amp;gertrude;
+    cp -&gt; sing();
+}
+</div></code></pre>
+<hr>
+<h2 id="s442-pointers-and-class-hierarchy">S4.4.2 Pointers and Class Hierarchy</h2>
+<hr>
+<h2 id="s443-dynamic-binding">S4.4.3 Dynamic Binding</h2>
+<h3 id="terminology">Terminology</h3>
+<ul>
+<li><strong>handle</strong> is an identifier that is used to access an object
+<ul>
+<li><strong>variable name</strong></li>
+<li><strong>reference</strong></li>
+<li><strong>pointer</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="example-dynamic-binding-why-it-breaks"><em>Example Dynamic Binding (why it breaks)</em></h4>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Animal</span> {</span>
+    <span class="hljs-keyword">public</span>:
+        Animal(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : name(n) {}
+        <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">()</span> </span>{}
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Bird</span> :</span> <span class="hljs-keyword">public</span> Animal {
+    <span class="hljs-keyword">public</span>:
+        Bird(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : Animal(n) {}
+        <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">( <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"tweet tweet"</span> &lt;&lt; <span class="hljs-built_in">endl</span>; )</span>
+}
+
+class Chicken : <span class="hljs-keyword">public</span> Bird </span>{
+    <span class="hljs-keyword">public</span>:
+        Chicken(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : Bird(n) {}
+        <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">( <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"cluck"</span> &lt;&lt; <span class="hljs-built_in">endl</span>; )</span>
+}
+
+class Cat : <span class="hljs-keyword">public</span> Animal </span>{
+    <span class="hljs-keyword">public</span>:
+        Cat(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : Animal(n) {}
+        <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">( <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"meow"</span> &lt;&lt; <span class="hljs-built_in">endl</span>; )</span>
+}
+
+<span class="hljs-comment">// Static (regular) binding</span>
+<span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-function">Animal  <span class="hljs-title">gertrude</span><span class="hljs-params">(<span class="hljs-string">"Gertrude"</span>)</span></span>;
+    <span class="hljs-function">Bird    <span class="hljs-title">birtrude</span><span class="hljs-params">(<span class="hljs-string">"Birtrude"</span>)</span></span>;
+    <span class="hljs-function">Chicken <span class="hljs-title">redHen</span><span class="hljs-params">(<span class="hljs-string">"LittleRedHen"</span>)</span></span>;
+    <span class="hljs-function">Cat     <span class="hljs-title">lady</span><span class="hljs-params">(<span class="hljs-string">"Lady"</span>)</span></span>;
+
+    <span class="hljs-comment">// Looks at the type of object and calls the sing function on that object</span>
+    gertrude.sing();
+    birtrude.sing();
+    redHen.sing();
+
+    Animal*     ap;
+    Animal*     ap2;
+    Bird*       bp;
+    Chicken*    cp;
+
+    ap  = &amp;birtrude;
+    ap2 = &amp;lady;
+    bp = &amp;redHen;
+
+    <span class="hljs-comment">// Unexpected behaviour</span>
+    <span class="hljs-comment">// The pointers sing f(x) will call the base class f(x) since we access them with the animal pointer (so the animal f(x) version will be called)</span>
+    ap -&gt; sing();
+    ap2 -&gt; sing();
+    bp -&gt; sing();
+    <span class="hljs-comment">// To fix this we need to use dynamic binding</span>
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</div></code></pre>
+<h3 id="function-binding">Function Binding</h3>
+<h4 id="static-binding">Static Binding</h4>
+<ul>
+<li>selected at compile time</li>
+<li>always used when called using <em>object variable name</em></li>
+</ul>
+<h4 id="dynamic-binding">Dynamic Binding</h4>
+<ul>
+<li>selected at runtime</li>
+<li>not used when called using <em>object variable name</em></li>
+<li>used  when called using <em>object pointer</em></li>
+</ul>
+<h3 id="virtual-functions">Virtual Functions</h3>
+<ul>
+<li>Allows us to do <strong>dynamic binding</strong></li>
+<li>Makes selection based on the type of <em>object</em> and not the type <em>handle</em>
+<ul>
+<li>with a <em>base class object</em> the base class f(x) is called</li>
+<li>with a <em>derived class object</em> the <em>dereived class</em> f(x) is called</li>
+</ul>
+</li>
+<li>Non-Virtual f(x)
+<ul>
+<li>f(x) selected at compile time</li>
+</ul>
+</li>
+</ul>
+<h4 id="example-virtual-functions"><em>Example (Virtual Functions)</em></h4>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Animal</span> {</span>
+    <span class="hljs-keyword">public</span>:
+        Animal(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : name(n) {}
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">()</span> </span>{}
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Bird</span> :</span> <span class="hljs-keyword">public</span> Animal {
+    <span class="hljs-keyword">public</span>:
+        Bird(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : Animal(n) {}
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">( <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"tweet tweet"</span> &lt;&lt; <span class="hljs-built_in">endl</span>; )</span> <span class="hljs-comment">// We use the virtual keyword so that we take advantage of polymorphism to bind the appropriate function</span>
+}
+
+class Chicken : <span class="hljs-keyword">public</span> Bird </span>{
+    <span class="hljs-keyword">public</span>:
+        Chicken(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : Bird(n) {}
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">( <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"cluck"</span> &lt;&lt; <span class="hljs-built_in">endl</span>; )</span>
+}
+
+class Cat : <span class="hljs-keyword">public</span> Animal </span>{
+    <span class="hljs-keyword">public</span>:
+        Cat(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : Animal(n) {}
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">( <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"meow"</span> &lt;&lt; <span class="hljs-built_in">endl</span>; )</span>
+}
+
+...
+</span></div></code></pre>
+<h4 id="example-bindings"><em>Example (Bindings)</em></h4>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-function">Animal  <span class="hljs-title">gertrudeObj</span><span class="hljs-params">(<span class="hljs-string">"Gertrude"</span>)</span></span>;
+    <span class="hljs-function">Bird    <span class="hljs-title">birtrudeObj</span><span class="hljs-params">(<span class="hljs-string">"Birtrude"</span>)</span></span>;
+    <span class="hljs-function">Chicken <span class="hljs-title">redHenObj</span><span class="hljs-params">(<span class="hljs-string">"Little Red hen"</span>)</span></span>;
+    <span class="hljs-function">Cat     <span class="hljs-title">ladyObj</span><span class="hljs-params">(<span class="hljs-string">"Lady"</span>)</span></span>;
+
+    <span class="hljs-built_in">vector</span>&lt;Animal&gt; barnyardObj;
+
+    barnyardObj.push_back(gertrudeObj);
+    barnyardObj.push_back(birtrudeObj);
+    barnyardObj.push_back(redHenObj);
+    barnyardObj.push_back(ladyObj);
+
+    <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-built_in">endl</span> &lt;&lt; <span class="hljs-string">"Barnyard harmony using objects..."</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
+    
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; barnyardObj.size(); ++i) {
+        <span class="hljs-comment">// Since we have a static binding here (called on the objects themselves) call the animal version of the sing() f(x)</span>
+        <span class="hljs-comment">// Always static binding since we are calling it on the object</span>
+        barnyardObj[i].sing();
+    }
+
+    Animal*     gertrudePointer = <span class="hljs-keyword">new</span> Animal(<span class="hljs-string">"Gertrude"</span>);
+    Bird*       birtrudePointer = <span class="hljs-keyword">new</span> Bird(<span class="hljs-string">"Birtrude"</span>);
+    Chicken*    redHenPointer   = <span class="hljs-keyword">new</span> Chicken(<span class="hljs-string">"Little REd Hen"</span>);
+    Cat*        ladyPointer     = <span class="hljs-keyword">new</span> Cat(<span class="hljs-string">"Lady"</span>);
+
+    <span class="hljs-built_in">vector</span>&lt;Animal*&gt; banyardPointers;
+
+    banyardPointers.push_back(gertrudePointer);
+    banyardPointers.push_back(birtrudePointer);
+    banyardPointers.push_back(redHenPointer);
+    banyardPointers.push_back(ladyPointer);
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; barnyardPointers.size(); ++i) {
+        <span class="hljs-comment">// Prints out the expected result of birds chirp, etc...</span>
+        banyardObj[i] -&gt; sing();
+    }
+}
+</div></code></pre>
+<h3 id="virtual-destructors">Virtual Destructors</h3>
+<ul>
+<li>used to deallocate memory using the base class pointer (default calls the base class pointer)</li>
+</ul>
+<h4 id="example-non-virtual-destructors"><em>Example Non-Virtual Destructors</em></h4>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Animal</span> {</span>
+    <span class="hljs-keyword">public</span>:
+        Animal(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : name(n) {}
+        ~Animal() { <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Animal is destroyed"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;}
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">()</span> </span>{}
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Bird</span> :</span> <span class="hljs-keyword">public</span> Animal {
+    <span class="hljs-keyword">public</span>:
+        Bird(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : Animal(n) {}
+        ~Bird() { <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Bird is destroyed"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;} <span class="hljs-comment">// We create a non-virtual desctructor</span>
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">( <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"tweet tweet"</span> &lt;&lt; <span class="hljs-built_in">endl</span>; )</span>
+}
+
+class Chicken : <span class="hljs-keyword">public</span> Bird </span>{
+    <span class="hljs-keyword">public</span>:
+        Chicken(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : Bird(n) {}
+        ~Chicken() { <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Chicken is destroyed"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;}
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">( <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"cluck"</span> &lt;&lt; <span class="hljs-built_in">endl</span>; )</span>
+}
+
+class Cat : <span class="hljs-keyword">public</span> Animal </span>{
+    <span class="hljs-keyword">public</span>:
+        Cat(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : Animal(n) {}
+        ~Cat() { <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Cat is destroyed"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;}
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">( <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"meow"</span> &lt;&lt; <span class="hljs-built_in">endl</span>; )</span>
+}
+
+<span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-function">Animal  <span class="hljs-title">gertrudeObj</span><span class="hljs-params">(<span class="hljs-string">"Gertrude"</span>)</span></span>;
+    <span class="hljs-function">Bird    <span class="hljs-title">birtrudeObj</span><span class="hljs-params">(<span class="hljs-string">"Birtrude"</span>)</span></span>;
+    <span class="hljs-function">Chicken <span class="hljs-title">redHenObj</span><span class="hljs-params">(<span class="hljs-string">"Little Red hen"</span>)</span></span>;
+    <span class="hljs-function">Cat     <span class="hljs-title">ladyObj</span><span class="hljs-params">(<span class="hljs-string">"Lady"</span>)</span></span>;
+
+    <span class="hljs-built_in">vector</span>&lt;Animal&gt; barnyardObj;
+
+    barnyardObj.push_back(gertrudeObj);
+    barnyardObj.push_back(birtrudeObj);
+    barnyardObj.push_back(redHenObj);
+    barnyardObj.push_back(ladyObj);
+
+    <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-built_in">endl</span> &lt;&lt; <span class="hljs-string">"Barnyard harmony using objects..."</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
+    
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; barnyardObj.size(); ++i) {
+        <span class="hljs-comment">// This only calls the Animal destructor and not the individual destructors of the Bird, etc...</span>
+        <span class="hljs-keyword">delete</span> barnyardObj[i];
+    }
+}
+</div></code></pre>
+<h4 id="example-virtual-destructors"><em>Example Virtual Destructors</em></h4>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Animal</span> {</span>
+    <span class="hljs-keyword">public</span>:
+        Animal(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : name(n) {}
+        <span class="hljs-keyword">virtual</span> ~Animal() { <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Animal is destroyed"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;}
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">()</span> </span>{}
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Bird</span> :</span> <span class="hljs-keyword">public</span> Animal {
+    <span class="hljs-keyword">public</span>:
+        Bird(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : Animal(n) {}
+        <span class="hljs-keyword">virtual</span> ~Bird() { <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Bird is destroyed"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;} <span class="hljs-comment">// We create a non-virtual desctructor</span>
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">( <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"tweet tweet"</span> &lt;&lt; <span class="hljs-built_in">endl</span>; )</span>
+}
+
+class Chicken : <span class="hljs-keyword">public</span> Bird </span>{
+    <span class="hljs-keyword">public</span>:
+        Chicken(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : Bird(n) {}
+        <span class="hljs-keyword">virtual</span> ~Chicken() { <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Chicken is destroyed"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;}
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">( <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"cluck"</span> &lt;&lt; <span class="hljs-built_in">endl</span>; )</span>
+}
+
+class Cat : <span class="hljs-keyword">public</span> Animal </span>{
+    <span class="hljs-keyword">public</span>:
+        Cat(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : Animal(n) {}
+        <span class="hljs-keyword">virtual</span> ~Cat() { <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Cat is destroyed"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;}
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">( <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"meow"</span> &lt;&lt; <span class="hljs-built_in">endl</span>; )</span>
+}
+
+<span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-function">Animal  <span class="hljs-title">gertrudeObj</span><span class="hljs-params">(<span class="hljs-string">"Gertrude"</span>)</span></span>;
+    <span class="hljs-function">Bird    <span class="hljs-title">birtrudeObj</span><span class="hljs-params">(<span class="hljs-string">"Birtrude"</span>)</span></span>;
+    <span class="hljs-function">Chicken <span class="hljs-title">redHenObj</span><span class="hljs-params">(<span class="hljs-string">"Little Red hen"</span>)</span></span>;
+    <span class="hljs-function">Cat     <span class="hljs-title">ladyObj</span><span class="hljs-params">(<span class="hljs-string">"Lady"</span>)</span></span>;
+
+    <span class="hljs-built_in">vector</span>&lt;Animal&gt; barnyardObj;
+
+    barnyardObj.push_back(gertrudeObj);
+    barnyardObj.push_back(birtrudeObj);
+    barnyardObj.push_back(redHenObj);
+    barnyardObj.push_back(ladyObj);
+
+    <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-built_in">endl</span> &lt;&lt; <span class="hljs-string">"Barnyard harmony using objects..."</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
+    
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; barnyardObj.size(); ++i) {
+        <span class="hljs-comment">// Calls all of the objects destructors (bird will call the bird and animal destructors)</span>
+        <span class="hljs-keyword">delete</span> barnyardObj[i];
+    }
+}
+</div></code></pre>
+<hr>
+<h2 id="s444-abstract-classes">S4.4.4 Abstract Classes</h2>
+<h3 id="definition">Definition</h3>
+<ul>
+<li>a class that is general and can't have instances directly</li>
+<li><strong>no objects</strong> can be created of an abstract class</li>
+<li>typically used a a base class</li>
+<li>in C++ we do this by definining a pure virtual f(x)</li>
+</ul>
+<h4 id="pure-virtual-function">Pure Virtual Function</h4>
+<ul>
+<li>a virtual function that does not have an implementation; <code>= 0</code> in class definition</li>
+<li>guarantees that all concrete classes <strong>must</strong> override it (implement it)</li>
+<li>Having <em>at least one pure virtual function</em> makes a class abstract</li>
+</ul>
+<h5 id="example"><em>Example</em></h5>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Animal</span> {</span>
+    <span class="hljs-keyword">public</span>:
+        Animal(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : name(n) {}
+        <span class="hljs-keyword">virtual</span> ~Animal() { <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Animal is destroyed"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;}
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">()</span> </span>{}
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">dance</span><span class="hljs-params">()</span> </span>= <span class="hljs-number">0</span>; <span class="hljs-comment">// We define this as a pure virtual f(x)</span>
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Cat</span> :</span> <span class="hljs-keyword">public</span> Animal {
+    <span class="hljs-keyword">public</span>:
+        Cat(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : Animal(n) {}
+        <span class="hljs-keyword">virtual</span> ~Cat() { <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Cat is destroyed"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;}
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">()</span> </span>{ ... };
+        <span class="hljs-comment">// Any derived class must implement the pure virtual f(x) dance</span>
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">dance</span><span class="hljs-params">()</span> </span>{ ... };
+}
+
+
+<span class="hljs-comment">// If we create a class that inherits from an abstract class (Animal) but doesn't implement the pure virtual f(x) then the created class also becomes an abstract class</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Pig</span> :</span> <span class="hljs-keyword">public</span> Animal {
+    <span class="hljs-keyword">public</span>:
+        Pig(<span class="hljs-built_in">string</span> n=<span class="hljs-string">""</span>) : Animal(n) {}
+        <span class="hljs-keyword">virtual</span> ~Pig() { <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Cat is destroyed"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;}
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sing</span><span class="hljs-params">()</span> </span>{ ... };
+}
+...
+</div></code></pre>
+<h2 id="s445-dynamic-casting">S4.4.5 Dynamic Casting</h2>
+<ul>
+<li>Using the <code>dynamic_cast</code> operator to downcast base class pointer
+<ul>
+<li>Used when we need to access a derived class member of an object</li>
+<li>returns <code>0</code> is the cast fails</li>
+</ul>
+</li>
+</ul>
+<h3 id="incomplete-example-dynamic-casting"><em>INCOMPLETE Example Dynamic Casting</em></h3>
+<pre class="hljs"><code><div>...
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-function">Animal*  <span class="hljs-title">gertrudePtr</span><span class="hljs-params">(<span class="hljs-string">"Gertrude"</span>)</span></span>;
+    <span class="hljs-function">Bird*    <span class="hljs-title">birtrudePtr</span><span class="hljs-params">(<span class="hljs-string">"Birtrude"</span>)</span></span>;
+    <span class="hljs-function">Chicken* <span class="hljs-title">redHenPtr</span><span class="hljs-params">(<span class="hljs-string">"Little Red hen"</span>)</span></span>;
+    <span class="hljs-function">Cat*     <span class="hljs-title">ladyPtr</span><span class="hljs-params">(<span class="hljs-string">"Lady"</span>)</span></span>;
+
+    <span class="hljs-built_in">vector</span>&lt;Animal&gt; barnyardObj;
+
+    barnyardObj.push_back(gertrudePtr);
+    barnyardObj.push_back(birtrudePtr);
+    barnyardObj.push_back(redHenPtr);
+    barnyardObj.push_back(ladyPtr);
+
+    <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-built_in">endl</span> &lt;&lt; <span class="hljs-string">"Barnyard harmony using objects..."</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
+    
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; barnyardObj.size(); ++i) {
+        Bird *cp = 
+        ...
+    }
+}
+</div></code></pre>
+
+</body>
+</html>
